@@ -1,4 +1,4 @@
-import { Languages, Moon, Sun, BookMarked, Tags, KeyRound, FolderPlus, LogIn, PanelsTopLeft } from "lucide-react";
+import { Languages, Moon, Sun, BookMarked, Tags, KeyRound, FolderPlus, LogIn, PanelsTopLeft, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -154,6 +154,27 @@ export function Header() {
                 </div>
               </TooltipTrigger>
               <TooltipContent>{t("tooltipApiKey")}</TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  asChild
+                  className="size-9 shrink-0"
+                  aria-label={t("tooltipGetApiKey")}
+                >
+                  <a
+                    href="https://aistudio.google.com/app/apikey"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink className="size-4" />
+                  </a>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t("tooltipGetApiKey")}</TooltipContent>
             </Tooltip>
           </div>
         </div>
