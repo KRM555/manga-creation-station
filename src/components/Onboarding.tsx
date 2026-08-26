@@ -12,7 +12,7 @@ export function Onboarding() {
   const { t } = useI18n();
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-4 pt-12 sm:px-6">
+    <section className="mx-auto w-full max-w-7xl px-4 pt-6 sm:px-6">
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           {t("howItWorks")}
@@ -22,7 +22,7 @@ export function Onboarding() {
         </p>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
         {steps.map((step, i) => (
           <Card
             key={step.titleKey}
