@@ -16,11 +16,18 @@ import {
 import { useI18n } from "@/lib/i18n";
 import { useTheme } from "@/lib/theme";
 import { useState } from "react";
+import { useStudio } from "@/lib/studio";
+import { AuthDialog } from "@/components/dialogs/AuthDialog";
+import { DictionaryDialog } from "@/components/dialogs/DictionaryDialog";
+import { TagsDialog } from "@/components/dialogs/TagsDialog";
 
 export function Header() {
   const { t, lang, setLang } = useI18n();
   const { theme, toggleTheme } = useTheme();
-  const [apiKey, setApiKey] = useState("");
+  const { apiKey, setApiKey, setPages, setView, setActivePage } = useStudio();
+  const [authOpen, setAuthOpen] = useState(false);
+  const [dictOpen, setDictOpen] = useState(false);
+  const [tagsOpen, setTagsOpen] = useState(false);
 
   return (
     <TooltipProvider delayDuration={200}>
@@ -81,7 +88,7 @@ export function Header() {
             {/* Login / Register */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="sm" className="shrink-0 gap-1.5">
+                <Button variant="ghost" size="sm" className="shrink-0 gap-1.5" onClick={() => setAuthOpen(true)}>
                   <LogIn className="size-4 shrink-0" />
                   <span className="hidden lg:inline">{t("loginRegister")}</span>
                 </Button>
@@ -92,7 +99,16 @@ export function Header() {
             {/* New Project */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="default" size="sm" className="shrink-0 gap-1.5">
+                <Button
+                  variant="default"
+                  size="sm"
+                  className="shrink-0 gap-1.5"
+                  onClick={() => {
+                    setPages([]);
+                    setActivePage(0);
+                    setView("upload");
+                  }}
+                >
                   <FolderPlus className="size-4 shrink-0" />
                   <span className="hidden lg:inline">{t("newProject")}</span>
                 </Button>
@@ -103,7 +119,7 @@ export function Header() {
             {/* Dictionary */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="sm" className="shrink-0 gap-1.5">
+                <Button variant="outline" size="sm" className="shrink-0 gap-1.5" onClick={() => setDictOpen(true)}>
                   <BookMarked className="size-4 shrink-0" />
                   <span className="hidden xl:inline">{t("dictionary")}</span>
                 </Button>
@@ -114,7 +130,7 @@ export function Header() {
             {/* Tags Settings */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="outline" size="sm" className="shrink-0 gap-1.5">
+                <Button variant="outline" size="sm" className="shrink-0 gap-1.5" onClick={() => setTagsOpen(true)}>
                   <Tags className="size-4 shrink-0" />
                   <span className="hidden xl:inline">{t("tagsSettings")}</span>
                 </Button>
@@ -142,6 +158,10 @@ export function Header() {
           </div>
         </div>
       </header>
+
+      <AuthDialog open={authOpen} onOpenChange={setAuthOpen} />
+      <DictionaryDialog open={dictOpen} onOpenChange={setDictOpen} />
+      <TagsDialog open={tagsOpen} onOpenChange={setTagsOpen} />
     </TooltipProvider>
   );
 }

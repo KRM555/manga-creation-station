@@ -19,6 +19,10 @@ import {
 } from "@/components/ui/select";
 import { useI18n, type TranslationKey } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+import { useStudio } from "@/lib/studio";
+import { extractPage } from "@/lib/gemini";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
 const ACCEPTED = [".zip", ".png", ".jpg", ".jpeg", ".webp"];
 
@@ -29,14 +33,96 @@ const targetLanguages: { value: string; labelKey: TranslationKey }[] = [
   { value: "ko", labelKey: "langKorean" },
 ];
 
+const IMAGE_EXT = [".png", ".jpg", ".jpeg", ".webp"];
+
 export function UploadSection() {
   const { t } = useI18n();
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const [targetLang, setTargetLang] = useState<string>("");
   const [extractSfx, setExtractSfx] = useState(true);
   const [detectVertical, setDetectVertical] = useState(true);
+  const [isRunning, setIsRunning] = useState(false);
+  const {
+    apiKey,
+    tags,
+    dictionary,
+    setPages,
+    setActivePage,
+    setView,
+    targetLang,
+    setTargetLang,
+    newUid,
+  } = useStudio();
+
+  const langLabel: Record<string, string> = {
+    ar: "Arabic",
+    en: "English",
+    ja: "Japanese",
+    ko: "Korean",
+  };
+
+  const analyze = async () => {
+    if (!apiKey.trim()) {
+      toast.error("Gemini API key is missing", {
+        description: "Paste your key in the header field to enable AI extraction.",
+      });
+      return;
+    }
+    const images = files.filter((f) =>
+      IMAGE_EXT.some((ext) => f.name.toLowerCase().endsWith(ext)),
+    );
+    if (images.length === 0) {
+      toast.error("Upload at least one page image (PNG, JPG or WEBP)");
+      return;
+    }
+    if (!targetLang) {
+      toast.error("Select a target language first");
+      return;
+    }
+
+    setIsRunning(true);
+    const toastId = toast.loading(`Analyzing ${images.length} page(s) with Gemini…`);
+    try {
+      const results = [];
+      for (const file of images) {
+        const chunks = await extractPage({
+          apiKey: apiKey.trim(),
+          file,
+          tags,
+          dictionary,
+          targetLanguage: langLabel[targetLang] ?? targetLang,
+          extractSfx,
+          detectVertical,
+        });
+        results.push({
+          id: newUid(),
+          name: file.name,
+          url: URL.createObjectURL(file),
+          paragraphs: chunks.map((c) => ({
+            id: newUid(),
+            original: c.original ?? "",
+            translated: c.translated ?? "",
+            tagId: tags.find((t) => t.id === c.tag)?.id ?? tags[0]?.id ?? "dialogue",
+          })),
+        });
+      }
+      setPages(results);
+      setActivePage(0);
+      setView("workspace");
+      toast.success("Extraction complete", {
+        id: toastId,
+        description: `${results.reduce((n, p) => n + p.paragraphs.length, 0)} paragraph(s) across ${results.length} page(s).`,
+      });
+    } catch (err) {
+      toast.error("Extraction failed", {
+        id: toastId,
+        description: err instanceof Error ? err.message : "Unknown error",
+      });
+    } finally {
+      setIsRunning(false);
+    }
+  };
 
   const addFiles = useCallback((incoming: FileList | File[] | null) => {
     if (!incoming) return;
@@ -172,8 +258,17 @@ export function UploadSection() {
               </Label>
             </div>
 
-            <Button size="lg" className="mt-2 w-full gap-2 text-base">
-              <Sparkles className="size-5" />
+            <Button
+              size="lg"
+              className="mt-2 w-full gap-2 text-base"
+              disabled={isRunning}
+              onClick={() => void analyze()}
+            >
+              {isRunning ? (
+                <Loader2 className="size-5 animate-spin" />
+              ) : (
+                <Sparkles className="size-5" />
+              )}
               {t("analyze")}
             </Button>
           </CardContent>
