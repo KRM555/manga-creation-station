@@ -15,7 +15,8 @@ export function fileToBase64(file: File): Promise<{ mimeType: string; data: stri
     reader.onerror = () => reject(new Error("Failed to read file"));
     reader.onload = () => {
       const result = String(reader.result);
-      const [meta, data] = result.split(",");
+      const meta = result.split(",")[0] ?? "";
+      const data = result.split(",")[1] ?? "";
       const mimeType = meta.slice(5).split(";")[0] || file.type || "image/png";
       resolve({ mimeType, data });
     };

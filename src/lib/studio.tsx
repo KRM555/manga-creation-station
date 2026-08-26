@@ -146,7 +146,9 @@ export function StudioProvider({ children }: { children: ReactNode }) {
             const next = [...p.paragraphs];
             const target = index + dir;
             if (target < 0 || target >= next.length) return p;
-            const [item] = next.splice(index, 1);
+            const item = next[index];
+            if (!item) return p;
+            next.splice(index, 1);
             next.splice(target, 0, item);
             return { ...p, paragraphs: next };
           }),
