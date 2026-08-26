@@ -4,6 +4,10 @@ import { ThemeProvider } from "@/lib/theme";
 import { Header } from "@/components/Header";
 import { Onboarding } from "@/components/Onboarding";
 import { UploadSection } from "@/components/UploadSection";
+import { Workspace } from "@/components/Workspace";
+import { StudioProvider, useStudio } from "@/lib/studio";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,14 +38,36 @@ function Index() {
   return (
     <ThemeProvider>
       <I18nProvider>
-        <div className="min-h-screen bg-background text-foreground">
-          <Header />
-          <main>
-            <UploadSection />
-            <Onboarding />
-          </main>
-        </div>
+        <StudioProvider>
+          <div className="min-h-screen bg-background text-foreground">
+            <Header />
+            <main>
+              <StudioBody />
+            </main>
+          </div>
+          <Toaster />
+        </StudioProvider>
       </I18nProvider>
     </ThemeProvider>
+  );
+}
+
+function StudioBody() {
+  const { view, setView } = useStudio();
+  return (
+    <>
+      <div className={view === "workspace" ? "hidden" : undefined}>
+        <UploadSection />
+        <Onboarding />
+      </div>
+      {view === "workspace" && (
+        <Workspace
+          onReanalyze={() => {
+            setView("upload");
+            toast.info("Adjust your settings, then run Analyze again");
+          }}
+        />
+      )}
+    </>
   );
 }
