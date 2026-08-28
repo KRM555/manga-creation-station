@@ -57,8 +57,8 @@ function StudioBody() {
   return (
     <>
       <div className={view === "workspace" ? "hidden" : undefined}>
-        <UploadSection />
         <Onboarding />
+        <UploadSection />
       </div>
       {view === "workspace" && (
         <Workspace
