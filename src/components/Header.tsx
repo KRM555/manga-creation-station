@@ -32,7 +32,7 @@ export function Header() {
   return (
     <TooltipProvider delayDuration={200}>
       <header className="sticky top-0 z-40 w-full border-b bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl flex-nowrap items-center gap-2 overflow-hidden px-4 sm:gap-3 sm:px-6">
+        <div className="mx-auto flex min-h-16 h-auto max-w-7xl flex-nowrap items-center gap-2 overflow-hidden px-4 py-2.5 sm:gap-3 sm:px-6">
           {/* Logo */}
           <div className="flex shrink-0 items-center gap-2.5">
             <div className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
@@ -40,7 +40,7 @@ export function Header() {
             </div>
             <div className="hidden leading-tight sm:block">
               <p className="text-sm font-bold tracking-tight">{t("appName")}</p>
-              <p className="hidden text-[11px] text-muted-foreground md:block">
+              <p className="hidden whitespace-normal text-[11px] leading-snug text-muted-foreground md:block max-w-[180px]">
                 {t("appTagline")}
               </p>
             </div>
