@@ -154,7 +154,7 @@ export function Header() {
                     />
                   </div>
                   <a
-                    href="https://aistudio.google.com/api-keys"
+                    href="https://aistudio.google.com/app/apikey"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={t("tooltipGetApiKey")}
