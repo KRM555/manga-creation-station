@@ -149,32 +149,20 @@ export function Header() {
                     onChange={(e) => setApiKey(e.target.value)}
                     placeholder={t("geminiApiKeyPlaceholder")}
                     aria-label={t("geminiApiKey")}
-                    className="h-9 w-32 min-w-0 ps-8 text-xs sm:w-44 md:w-56"
+                    className="h-9 w-32 min-w-0 pe-10 ps-8 text-xs sm:w-44 md:w-56"
                   />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>{t("tooltipApiKey")}</TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  asChild
-                  className="size-9 shrink-0"
-                  aria-label={t("tooltipGetApiKey")}
-                >
                   <a
-                    href="https://aistudio.google.com/app/apikey"
+                    href="https://aistudio.google.com/api-keys"
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={t("tooltipGetApiKey")}
+                    className="absolute end-0 top-0 flex h-9 w-9 items-center justify-center rounded-md border border-input bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   >
                     <ExternalLink className="size-4" />
                   </a>
-                </Button>
+                </div>
               </TooltipTrigger>
-              <TooltipContent>{t("tooltipGetApiKey")}</TooltipContent>
+              <TooltipContent>{t("tooltipApiKey")}</TooltipContent>
             </Tooltip>
           </div>
         </div>
