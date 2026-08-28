@@ -141,22 +141,24 @@ export function Header() {
             {/* Gemini API Key (masked) */}
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="relative min-w-0 shrink">
-                  <KeyRound className="pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                  <Input
-                    type="password"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    placeholder={t("geminiApiKeyPlaceholder")}
-                    aria-label={t("geminiApiKey")}
-                    className="h-9 w-32 min-w-0 pe-10 ps-8 text-xs sm:w-44 md:w-56"
-                  />
+                <div className="flex min-w-0 shrink items-center">
+                  <div className="relative min-w-0 shrink">
+                    <KeyRound className="pointer-events-none absolute start-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      type="password"
+                      value={apiKey}
+                      onChange={(e) => setApiKey(e.target.value)}
+                      placeholder={t("geminiApiKeyPlaceholder")}
+                      aria-label={t("geminiApiKey")}
+                      className="h-9 w-32 min-w-0 rounded-r-none ps-8 pe-3 text-xs sm:w-44 md:w-56"
+                    />
+                  </div>
                   <a
                     href="https://aistudio.google.com/api-keys"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={t("tooltipGetApiKey")}
-                    className="absolute end-0 top-0 flex h-9 w-9 items-center justify-center rounded-md border border-input bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-r-md border border-l-0 border-input bg-background text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   >
                     <ExternalLink className="size-4" />
                   </a>
